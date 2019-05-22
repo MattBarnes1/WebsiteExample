@@ -1,0 +1,12 @@
+﻿@page
+@model WebApplication5.Pages.ChangeLogWebsiteModel
+@{
+    ViewData["Title"] = "Change Log - Website";
+}
+
+<h2>Change Log - Website</h2>
+<div class="panel panel-default" style="width:50%">
+    <div class="panel-body">@Html.Raw(@Model.ChangeLog)</div>
+</div>
+
+

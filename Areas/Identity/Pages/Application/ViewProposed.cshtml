@@ -1,0 +1,44 @@
+﻿@page "{userID?}/{fileToEdit?}"
+@inject UserManager<UserData> myUsers
+@model ViewProposedModel
+@{
+
+
+}
+@{
+    var myUsername = myUsers.GetUserAsync(User);
+    myUsername.Wait();
+    if (!myUsername.IsCompletedSuccessfully)
+    {
+        Redirect("/Error");
+    }
+}
+@section Scripts
+    {
+    <script>        
+        $("#MySelectedFileList").change(function () {
+            var myAjax = $.ajax({
+                url: './ViewProposed?fileid=' + $("#MySelectedFileList").val() + "&handler=ChangeFile",
+                type: 'GET',
+                data: {},
+                headers: { RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val() }
+            });
+            $("#DisplayArea").empty();
+            myAjax.done(function (result) {
+                if (result != null) {
+                    $("#DisplayArea").val(result["loreBody"]);
+                }
+            });
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col-lg-2">
+        <label>Lore Entries</label>
+        @Html.ListBox("MySelectedFileList", Model.MyLoreList.AsEnumerable(), new { @style = "width:100%; height:100%;" })
+    </div>
+    <div class="col-lg-10">
+        <textarea readonly id="DisplayArea" name="DisplayArea" style="width:100%" rows="10"></textarea>
+    </div>
+</div>

@@ -1,0 +1,119 @@
+﻿@page
+@model DevBlogEditorModel
+@{
+}
+
+@section Scripts
+{
+    @foreach(var B in Model.PossibleSelection)
+    {
+        Html.Raw(B.JavascriptFunction);
+    }
+}
+
+
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">File<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#NewModal">
+                        New
+                    </button>
+                </li>
+                    <li>
+                        @if (String.IsNullOrEmpty((String)ViewData["FileName"]))
+                        {
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#SaveAsModal">
+                                Save
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" onclick="SaveSite()">
+                                Save
+                            </button>
+                        }
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#SaveAsModal">
+                            Save As
+                        </button>
+                    </li>
+                <li>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#OpenModal">
+                        Open
+                    </button>
+                </li>
+            </ul>
+            <li>View my Blog Entry</li>
+    </ul>
+</div>
+
+    //https://getbootstrap.com/docs/4.0/components/forms/
+<div class="row">
+    <form method="post">
+        <div class="col-lg-2">
+            <ul>
+                @foreach (var A in Model.PossibleSelection)
+                {
+                    if (A.DisplayModal)
+                    {
+                        <li>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#@A.Name Modal">
+                                Insert @A.Name;
+                            </button>
+                        </li>
+                    }
+                    else
+                    {
+                        <li><button type="button" class="btn" onclick="@Html.Raw(@A.JavascriptOnClickString)">Insert @A.Name</button></li>
+                    }
+                }
+            </ul>
+            @foreach (var A in Model.PossibleSelection)
+            {
+                if (A.DisplayModal)
+                {
+                    <div class="modal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">@Html.Raw(@A.Title)</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    @Html.Raw(@A.HTMLModalBody)
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" onclick="@Html.Raw(@A.JavascriptOnClickString)" class="btn btn-primary">Insert</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="col-lg-10">
+            <textarea asp-for="HTMLData" style="height:100%">
+
+
+
+
+
+
+
+
+
+
+
+
+            </textarea>
+        </div>
+    </form>
+</div>
+
+
+

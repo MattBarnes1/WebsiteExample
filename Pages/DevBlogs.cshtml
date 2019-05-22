@@ -1,0 +1,54 @@
+﻿@page "{UserName?}/{Blog?}"
+@inject UserManager<UserData> myUser
+@using System.IO;
+@model WebApplication5.Pages.DevBlogsModel
+@{
+    ViewData["Title"] = "DevBlogs";
+}
+
+<h2>DevBlogs</h2>
+<div class="row">
+    <div class="col-lg-3">
+        @for (int i = 0; i < myUser.Users.Count(); i++)
+        {
+            <div id="@myUser.Users.ElementAt(i).UserName">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#@i" aria-expanded="true" aria-controls="collapseOne">
+                                @myUser.Users.ElementAt(i).UserName
+                            </button>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @for (int i = 0; i < myUser.Users.Count(); i++)
+        {
+            <div id="@i" class="collapse" aria-labelledby="headingTwo" data-parent="#@myUser.Users.ElementAt(i).UserName">
+                <div class="card-body">
+                    @{
+                        String[] myItem = Model.GetUserWebDevFiles(myUser.Users.ElementAt(i).Id);
+                    }
+                    @for (int g = 0; g < myItem.Length; g++)
+                    {
+                        <a asp-page="./DevBlogs/myUser.Users.ElementAt(i).Username/myItem[g]">@myItem[g]</a>
+                    }
+                </div>
+            </div>
+        }
+
+
+    </div>
+        <div class="col-lg-9">
+            <div class="split-email-ReadWrite">
+                @if (RouteData.Values["UserName"] != null)
+                {
+                    var myValue = myUser.FindByNameAsync((String)RouteData.Values["UserName"]);
+                    String aString = @FileEditingService.ReadFileAsString("~/Home/" + myValue.Id + "/DevBlogs/" + (String)RouteData.Values["Blog"]); //TODO: CHECK FOR FLAWS HERE
+                    @Html.Raw(aString);
+                }
+            </div>
+        </div>
+</div>

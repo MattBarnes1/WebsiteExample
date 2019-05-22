@@ -1,0 +1,139 @@
+﻿@page "{modelid?}"
+@inject UserManager<UserData> myUsers
+@model ModelViewerModel
+@{
+}
+@section Scripts
+{
+<script>
+
+    function RotateView(event) {
+    }
+
+    $("document").ready(function () {
+        var Canvas = document.getElementById("WebGLCanvas");
+        /* Step1: Prepare the canvas and get WebGL context */
+
+        var gl = Canvas.getContext('webgl');
+        if (gl === null) {
+            alert("Unable to initialize WebGL. Your browser or machine may not support it.");
+        }
+
+        /* Step2: Define the geometry and store it in buffer objects */
+        //https://stackoverflow.com/questions/553813/how-do-i-give-javascript-variables-data-from-asp-net-variables
+        var vertices = @Model.GetVerticies(); //TODO: Collada Importer
+
+        // Create a new buffer object
+        var vertex_buffer = gl.createBuffer();
+
+        // Bind an empty array buffer to it
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+
+        // Pass the vertices data to the buffer
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+        // Unbind the buffer
+        gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+        /* Step3: Create and compile Shader programs */
+
+        // Vertex shader source code
+        var vertCode =
+            'attribute vec2 coordinates;' +
+            'void main(void) {' + ' gl_Position = vec4(coordinates,0.0, 1.0);' + '}';
+
+        //Create a vertex shader object
+        var vertShader = gl.createShader(gl.VERTEX_SHADER);
+
+        //Attach vertex shader source code
+        gl.shaderSource(vertShader, vertCode);
+
+        //Compile the vertex shader
+        gl.compileShader(vertShader);
+
+        //Fragment shader source code
+        var fragCode = 'void main(void) {' + 'gl_FragColor = vec4(0.0, 0.0, 0.0, 0.1);' + '}';
+
+        // Create fragment shader object
+        var fragShader = gl.createShader(gl.FRAGMENT_SHADER);
+
+        // Attach fragment shader source code
+        gl.shaderSource(fragShader, fragCode);
+
+        // Compile the fragment shader
+        gl.compileShader(fragShader);
+
+        // Create a shader program object to store combined shader program
+        var shaderProgram = gl.createProgram();
+
+        // Attach a vertex shader
+        gl.attachShader(shaderProgram, vertShader);
+
+        // Attach a fragment shader
+        gl.attachShader(shaderProgram, fragShader);
+
+        // Link both programs
+        gl.linkProgram(shaderProgram);
+
+        // Use the combined shader program object
+        gl.useProgram(shaderProgram);
+
+        /* Step 4: Associate the shader programs to buffer objects */
+
+        //Bind vertex buffer object
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+
+        //Get the attribute location
+        var coord = gl.getAttribLocation(shaderProgram, "coordinates");
+
+        //point an attribute to the currently bound VBO
+        gl.vertexAttribPointer(coord, 2, gl.FLOAT, false, 0, 0);
+
+        //Enable the attribute
+        gl.enableVertexAttribArray(coord);
+
+        /* Step5: Drawing the required object (triangle) */
+
+        // Clear the canvas
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+
+        // Enable the depth test
+        gl.enable(gl.DEPTH_TEST);
+
+        // Clear the color buffer bit
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        // Set the view port
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        //TODO: Rotation Calculations
+        // Draw the triangle
+
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+    });
+    </script>
+}
+<div class="row">
+    <div class="col-lg-2">
+        @{
+            List<String> SelectedItems = new List<string>();
+            var Result = myUsers.GetUsersInRoleAsync("Modeler"); //TODO: double check
+            Result.Wait();
+
+            foreach (UserData A in Result.Result)
+            {
+                foreach (String B in FileEditingService.GetFilenamesInDirectory("~/Home/" + A.Id + "/Models"))
+                {
+                    SelectedItems.Add(A.Id + "/" + B);
+                }
+            }
+        }
+        <h1>Viewable Models</h1>
+        @foreach (String A in SelectedItems)
+        {
+            @A
+        }
+    </div>
+    <div class="col-lg-10">
+        <canvas id="WebGLCanvas" onload="" ondrag="RotateView" width="800" height="600"></canvas>
+    </div>
+</div>

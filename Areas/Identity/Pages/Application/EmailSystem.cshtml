@@ -1,0 +1,82 @@
+﻿@page "{emailid?}"
+@inject UserManager<UserData> myManager
+@model EmailSystemModel
+@{
+
+    String Top = Guid.NewGuid().ToString();
+    String Bottom = Guid.NewGuid().ToString();
+}
+
+@Html.AntiForgeryToken()
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            setInterval(CheckEmailChanges, 500);
+        });
+
+        function CheckEmailChanges() {
+            var myAjax = $.ajax({
+                url: './EmailSystem?handler=AjaxEmailList',
+                type: 'GET',
+                data: {},
+                headers: { RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val() }
+            });
+            myAjax.done(function (result) {
+                i = 100;
+                var RandomIDGen = [];
+                var Token = $('input:hidden[name="__RequestVerificationToken"]').val();
+                var EmailText = "";
+                for (i = 0; i < result.length; i++) {
+                    EmailText += "<div id=\"" + result[i]['topID'] + "\"><div class=\"card\">\n<div class=\"card-header\"><h5 class=\"mb-0\">";
+                    EmailText += "<button class=\"btn btn-link\" data-toggle=\"collapse\" data-target=\"#" + result[i]["bottomID"] + "\" aria-expanded=\"true\" aria-controls=\"collapseOne\">" +
+                        result[i]["date"] + "</button></h5></div></div></div>";
+                    EmailText += "<div id=\"" + result[i]["bottomID"] + "\"class=\"collapse\" aria-labelledby=\"headingTwo\" data-parent=\"#" + result[i]["topID"] + "\"><div class=\"card-body\">";
+                    for (g = 0; g < result[i]["myEmails"].length; g++) {
+                        EmailText += "<form method=\"post\" action=\"/Identity/Application/EmailSystem?id=" + result[i].myEmails[g]["id"] + "&amp;handler=StartReply\"><input type=\"submit\" class=\"EmailListText\" value=\"" + result[i]["date"] + " " + result[i]["usernames"][g] + "\"/><input name=\"__RequestVerificationToken\" type=\"hidden\" value=\"" + Token + "\"</input></form><form method=\"post\"action=\"/Identity/Application/EmailSystem?id=" + result[i].myEmails[g]["id"] + "&amp;handler=Delete\"><input type=\"submit\" value=\"Delete\" name=\"Delete\"></input><input name=\"__RequestVerificationToken\" type=\"hidden\" value=\"" + Token + "\"></input></form>";
+                    }
+                    EmailText += "</div></div>";
+                }
+                if ($("#EmailsInternals").length == 0) {
+                    $("#EmailsInternals").html(EmailText);
+                }
+                else if ($("#EmailsInternals")[0].childElementCount != 0) {
+                    $("#EmailsInternals").replaceWith(EmailText);
+
+                }
+                else {
+                    $("#EmailsInternals").html(EmailText);
+                }
+
+            });
+        }
+    
+    </script>
+}
+
+
+
+
+<div class="row">
+    <div id="Emails" class="col-lg-2">
+    <div id="EmailsInternals"></div>
+    </div>
+    <div class="col-lg-10">
+        <form method="post" asp-page-handler="Reply">
+            <input type ="hidden" name="id" value="@Model.ReplyID" />
+            <label>To:</label>
+            <input id="TypingUserName" asp-for="myNewEmail.To" />
+            <br /><label>Original Message</label><br />
+            <textarea class="form-control" readonly asp-for="myNewEmail.ReplyBody" rows="5"></textarea>
+            <textarea class="form-control" asp-for="myNewEmail.Body" rows="5"></textarea>
+            <label>@Model.Error</label>
+            <input type="submit" value="Send" />
+        </form>
+    </div>
+</div>
+
+
+<!--//https://www.learnrazorpages.com/razor-pages/handler-methods-->
+<!--https://www.w3schools.com/howto/howto_css_split_screen.asp-->
+<!--//https://www.w3schools.com/bootstrap/bootstrap_list_groups.asp-->
+<!--//https://getbootstrap.com/docs/4.0/components/forms/-->

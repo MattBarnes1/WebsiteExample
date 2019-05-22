@@ -1,0 +1,14 @@
+﻿@page
+@inject UserManager<UserData> myUsers;
+@model UploadModelModel
+@{
+    String Directory = "~/Home/" + myUsers.GetUserId(User) + "/Models/";
+}
+
+<div class="custom-file">
+    <form method="post" asp-page-handler="UploadModel" enctype="multipart/form-data">
+        <label for="file">Choose file to upload</label>
+        <input type="file" name="myFileSent" accept=".dae,.blend" />
+        <input type="submit" name="Submit File" value="Submit File" />
+    </form>
+</div>

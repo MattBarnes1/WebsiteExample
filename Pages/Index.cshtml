@@ -1,0 +1,52 @@
+﻿@page
+@model WebApplication5.Pages.NewIndexModel
+@{
+    ViewData["Title"] = "The Den Development Studios";
+    ViewData["Background"] = "{ background-image: url(\"~/images/City-no-bar-grunge.jpg\"); background - position: top; background-attachment: fixed; }";
+}
+<div id="carousel" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#carousel" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel" data-slide-to="1"></li>
+        <li data-target="#carousel" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="item active">
+            <img src="~/images/Photos/Sword.png" style="width:100%; height:400px">
+        </div>
+        <div class="item">
+            <img src="~/images/Photos/Hammer.png" style="width:100%; height:400px">
+        </div>
+        <div class="item">
+            <img src="~/images/Photos/Tree.png" style="width:100%; height:400px">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="border-all">
+            <div class="span-2 background-light margin-top-medium margin-bottom-medium">
+                <h1>Fall of Magic</h1>
+                <p />
+                "M"
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="border border-dark">
+            <h1>Endless</h1>
+            <p />
+            "You are one man, a scavenger, after a horrible, world ending, event. By night, you brave zombies and loot buildings for supplies and barricade your houses to prepare for day. By day, beings of pure light will arise and you must hide in your fortified house before they see and obliterate you. You must create a safe, dark, windowless space by night which to sleep through the day in.
+            The generation will reroll the map's arrangement every night, probably with some governing AI trying to inconvenience you."
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="border border-dark">
+            <h1>Into The Void</h1>
+            <p />
+            "Humanity has been crushed; the only choice is to rebuild."
+        </div>
+    </div>
+</div>
+<h2>Our Company...</h2>
+<p /> wants to create a different sort of game studio; one that pays attention to the wants and needs of both the employees and the players. Despite being a small studio, we have huge hopes to create an unrivaled company. 

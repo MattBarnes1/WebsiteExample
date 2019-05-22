@@ -1,0 +1,66 @@
+﻿@page
+@inject UserManager<UserData> myUsers
+@model ViewMyDraftsModel
+@{
+    var myUsername = myUsers.GetUserAsync(User);
+    myUsername.Wait();
+    if (!myUsername.IsCompletedSuccessfully)
+    {
+        Redirect("/Error");
+    }
+}
+@section Scripts
+    {
+    <script>
+        
+
+        $("#MySelectedFileList").change(function () {
+            if($("#MySelectedFileList").val() == null) return;
+        if ($("#MySelectedFileList").val().length == 0) return;
+        var myAjax = $.ajax({
+            url: './ViewMyDrafts?fileid=' + $("#MySelectedFileList").val() + "&handler=ChangeFile",
+            type: 'GET',
+            data: {},
+            headers: { RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val() }
+        });
+        $("#DisplayArea").empty();
+        myAjax.done(function (result) {
+            if (result != null) {
+                if (result.length != 0) {
+                    $('input[name="PostID"]').val($("#MySelectedFileList").val());
+                    //$("#PostID").val($("#MySelectedFileList").val());
+                    $("#DisplayArea").val(result["loreBody"]);
+                }
+            }
+        });
+        });
+        $("#DisplayArea").change(function () {
+            if ($("#MySelectedFileList").val() == null || $("#MySelectedFileList").val().length == 0) return;
+            var myAjax = $.ajax({
+                url: './ViewMyDrafts?fileid=' + $("#MySelectedFileList").val() + '&fileText=' + $("#DisplayArea").val() + "&handler=UpdateFile",
+                type: 'GET',
+                data: {},
+                headers: { RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val() }
+            });
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col-lg-2">
+        <form method="post" asp-page-handler="NewItem">
+            <label>Lore Name</label>
+            <input type="text" name="MyNewItemName" />
+            <input type="submit" value="Create New!" />
+        </form>
+        <label>Lore Entries</label>
+        @Html.ListBox("MySelectedFileList", Model.MyLoreList.AsEnumerable())
+    </div>
+    <div class="col-lg-10">
+        <form method="post" asp-page-handler="SubmitToCanon">
+        <input type="hidden" value="" name="PostID" id="PostID" />
+        <textarea name="DisplayArea" id="DisplayArea" style="width:100%" rows="10" ></textarea>
+        <input type="submit" value="Submit For Evaluation!" />
+        </form>
+    </div>
+</div>

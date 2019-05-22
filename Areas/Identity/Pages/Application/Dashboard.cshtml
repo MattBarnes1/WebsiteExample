@@ -1,0 +1,447 @@
+﻿@page
+@model DashboardModel
+@{
+    //TODO: FIX TASK DISPLAY
+    //TODO: Create TopHalfResponse && BottomHalfResponse for task
+    int MyDistanceMondayTilSunday = (int)DateTime.Now.DayOfWeek - (int)DayOfWeek.Monday; //mapped to 0-6
+    DateTime Monday = DateTime.Now;
+
+    String MondaysDate;
+    String TuesdaysDate;
+    String WednesdaysDate;
+    String ThursdaysDate;
+    String FridaysDate;
+    String SaturdaysDate;
+    String SundaysDate;
+    if (MyDistanceMondayTilSunday == 0)
+    {
+        MondaysDate = Monday.Date.ToShortDateString();
+    }
+    else
+    {
+        Monday = DateTime.Now.Date.Subtract(TimeSpan.FromDays(MyDistanceMondayTilSunday));
+        MondaysDate = Monday.ToShortDateString();
+
+    }
+    DateTime Tuesdays = Monday.Date.AddDays(1);
+    TuesdaysDate = Tuesdays.ToShortDateString();
+    DateTime Wednesdays = Monday.Date.AddDays(2);
+    WednesdaysDate = Monday.Date.AddDays(2).ToShortDateString();
+    DateTime Thursdays = Monday.Date.AddDays(3);
+    ThursdaysDate = Monday.Date.AddDays(3).ToShortDateString();
+    DateTime Fridays = Monday.Date.AddDays(4);
+    FridaysDate = Monday.Date.AddDays(4).ToShortDateString();
+    DateTime Saturdays = Monday.Date.AddDays(5);
+    SaturdaysDate = Monday.Date.AddDays(5).ToShortDateString();
+    DateTime Sundays = Monday.Date.AddDays(6);
+    SundaysDate = Monday.Date.AddDays(6).ToShortDateString();
+}
+<h3>Weeks Events</h3>
+<div class="container">
+    <div class="row align-items-center">
+        <div class="col-md-3" id="Monday">
+            @if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
+            {
+                <div class="currentDay">
+                    <h1 id="CalendarNumber">@MondaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Monday))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+                </div>
+            }
+            @if (DateTime.Now.DayOfWeek != DayOfWeek.Monday)
+            {
+                <div class="ActiveDay">
+                    <h1 id="CalendarNumber">@MondaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Monday))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+
+                </div>
+            }
+        </div>
+        <div class="col-md-3" id="Tuesday">
+            @if (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday)
+            {
+                <div class="currentDay">
+                    <h1 id="CalendarNumber">@TuesdaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Tuesdays))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+                </div>
+            }
+            @if (DateTime.Now.DayOfWeek != DayOfWeek.Tuesday)
+            {
+                <div class="InactiveDay">
+                    <h1 id="CalendarNumber">@TuesdaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Tuesdays))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+                </div>
+            }           
+        </div>
+        <div class="col-md-3" id="Wednesday">
+            @if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
+            {
+                <div class="currentDay">
+                    <h1 id="CalendarNumber">@WednesdaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Wednesdays))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+                </div>
+            }
+            @if (DateTime.Now.DayOfWeek != DayOfWeek.Wednesday)
+            {
+                <div class="ActiveDay">
+                    <h1 id="CalendarNumber">@WednesdaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Wednesdays))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+                </div>
+            }
+        </div>
+        <div class="col-md-3" id="Thursday">
+            @if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
+            {
+                <div class="currentDay">
+                    <h1 id="CalendarNumber">@ThursdaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Thursdays))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+                </div>
+            }
+            @if (DateTime.Now.DayOfWeek != DayOfWeek.Thursday)
+            {
+                <div class="ActiveDay">
+                    <h1 id="CalendarNumber">@ThursdaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Thursdays))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+                </div>
+            }
+        </div>
+        <div class="col-md-3" id="Friday">
+            @if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
+            {
+                <div class="currentDay">
+                    <h1 id="CalendarNumber">@FridaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Fridays))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+                </div>
+            }
+            @if (DateTime.Now.DayOfWeek != DayOfWeek.Friday)
+            {
+                <div class="ActiveDay">
+                    <h1 id="CalendarNumber">@FridaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Fridays))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+                </div>
+            }
+        </div>
+        <div class="col-md-3" id="Saturday">
+            @if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
+            {
+                <div class="currentDay">
+                    <h1 id="CalendarNumber">@SaturdaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Saturdays))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+                </div>
+            }
+            @if (DateTime.Now.DayOfWeek != DayOfWeek.Saturday)
+            {
+                <div class="ActiveDay">
+                    <h1 id="CalendarNumber">@SaturdaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Saturdays))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+                </div>
+            }
+        </div>
+        <div class="col-md-3" id="Sunday">
+            @if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+            {
+                <div class="currentDay">
+                    <h1 id="CalendarNumber">@SundaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Sundays))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+                </div>
+            }
+            @if (DateTime.Now.DayOfWeek != DayOfWeek.Sunday)
+            {
+                <div class="ActiveDay">
+                    <h1 id="CalendarNumber">@SundaysDate</h1>
+                    @foreach (EventData A in Model.GetEvents(Sundays))
+                    {
+                        <div class="CalendarData">
+                            @A.myEventString
+                        </div>
+                        <br />
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    </div>
+
+<hr />
+<div class="BottomHalfResponse">
+    <h3>Your Scheduled Tasks</h3>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 bottom-right" id="Monday">
+                @if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
+                {
+                    <div class="currentDay">
+                        <h1 id="CalendarNumber">@MondaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Monday))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+                @if (DateTime.Now.DayOfWeek != DayOfWeek.Monday)
+                {
+                    <div class="InactiveDay">
+                        <h1 id="CalendarNumber">@MondaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Monday))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+                            </div>
+                            <br />
+                        }
+
+                    </div>
+                }
+            </div>
+            <div class="col-md-3" id="Tuesday">
+                @if (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday)
+                {
+                    <div class="currentDay">
+                        <h1 id="CalendarNumber">@TuesdaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Tuesdays))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+                @if (DateTime.Now.DayOfWeek != DayOfWeek.Tuesday)
+                {
+                    <div class="InactiveDay">
+                        <h1 id="CalendarNumber">@TuesdaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Tuesdays))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+            </div>
+            <div class="col-md-3" id="Wednesday">
+                @if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
+                {
+                    <div class="currentDay">
+                        <h1 id="CalendarNumber">@WednesdaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Wednesdays))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+                @if (DateTime.Now.DayOfWeek != DayOfWeek.Wednesday)
+                {
+                    <div class="ActiveDay">
+                        <h1 id="CalendarNumber">@WednesdaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Wednesdays))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+            </div>
+            <div class="col-md-3" id="Thursday">
+                @if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
+                {
+                    <div class="currentDay">
+                        <h1 id="CalendarNumber">@ThursdaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Thursdays))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+                @if (DateTime.Now.DayOfWeek != DayOfWeek.Thursday)
+                {
+                    <div class="ActiveDay">
+                        <h1 id="CalendarNumber">@ThursdaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Thursdays))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+            </div>
+            <div class="col-md-3" id="Friday">
+                @if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
+                {
+                    <div class="currentDay">
+                        <h1 id="CalendarNumber">@FridaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Fridays))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+                @if (DateTime.Now.DayOfWeek != DayOfWeek.Friday)
+                {
+                    <div class="ActiveDay">
+                        <h1 id="CalendarNumber">@FridaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Fridays))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+            </div>
+            <div class="col-md-3" id="Saturday">
+                @if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    <div class="currentDay">
+                        <h1 id="CalendarNumber">@SaturdaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Saturdays))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+                @if (DateTime.Now.DayOfWeek != DayOfWeek.Saturday)
+                {
+                    <div class="ActiveDay">
+                        <h1 id="CalendarNumber">@SaturdaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Saturdays))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+            </div>
+            <div class="col-md-3" id="Sunday">
+                @if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    <div class="currentDay">
+                        <h1 id="CalendarNumber">@SundaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Sundays))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+                @if (DateTime.Now.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    <div class="ActiveDay">
+                        <h1 id="CalendarNumber">@SundaysDate</h1>
+                        @foreach (TaskData A in Model.GetTasks(Sundays))
+                        {
+                            <div class="CalendarData">
+                                <label>@A.ShortTaskDescription</label>
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿@page
+@model PersonalSettingsModel
+@{
+}
+
+@section Scripts
+    {
+    <script>
+        function SetBackgroundSettings() {
+            var Selection = $("#MyQuickChoices").val();
+            if (Selection == null || Selection == "") return;
+            var myAjax = $.ajax({
+                url: './UserSettings?background=' + Selection +'&handler=AjaxChangeBackground',
+                type: 'GET',
+                data: {},
+                headers: { RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val() }
+            });
+            myAjax.done(function (result) {
+                if (result =="") {
+                    $("body").css("background-image", Selection);
+                }
+            });
+        }
+        $("#MyQuickChoices").change(SetBackgroundSettings());
+        //$("#customURL").change(SetBackgroundSettings($("#customURL").val()));
+
+
+    </script>
+}
+
+<h3>User Settings</h3>
+<label>Default Backgrounds</label>
+@Html.DropDownList("MyQuickChoices", Model.PossibleBackgrounds, "Select one!");
+<br />
+<label>Custom Background:</label>
+<input type="url" value="@Model.MyBackgroundURL" name="customURL" />

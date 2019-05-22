@@ -1,0 +1,192 @@
+﻿@page
+@inject UserManager<UserData> myUsers
+@model TaskViewerModel
+@{
+    
+    //TODO: finish Task Viewer
+}
+<html>
+<head>
+    <title>Task List</title>
+</head>
+<body>
+
+    <div id="myFinishedTasks">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#MyFinishedTasks" aria-expanded="true" aria-controls="collapseOne">
+                        My Scheduled Tasks
+                    </button>
+                </h5>
+            </div>
+        </div>
+    </div>
+    <div id="MyFinishedTasks" class="collapse" aria-labelledby="headingTwo" data-parent="#myFinishedTasks">
+        <div class="card-body">
+            <table>
+                <tr>
+                    <td>Task Owner</td>
+                    <td>Task Description</td>
+                </tr>
+                @for (int g = 0; g < Model.myScheduledTasks.Count(); g++)
+                {
+                    <tr>
+                        <td>@Model.myScheduledTasks[g].ClaimedByID</td>
+                        <td>@Model.myScheduledTasks[g].TaskDescription</td>
+                    </tr>
+                }
+                <!-- async for updates?-->
+            </table>
+        </div>
+    </div>
+
+    <div id="myActiveTasks">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#MyActiveTasks" aria-expanded="true" aria-controls="collapseOne">
+                        My Tasks
+                    </button>
+                </h5>
+            </div>
+        </div>
+    </div>
+    <div id="MyActiveTasks" class="collapse" aria-labelledby="headingTwo" data-parent="#myActiveTasks">
+        <div class="card-body">
+            <table>
+                <tr>
+                    <td>Task Owner</td>
+                    <td>Task Description</td>
+                </tr>
+                @for (int g = 0; g < Model.myActiveTasks.Count(); g++)
+                {
+                <tr>
+                    <td>--</td>
+                    <td>@Model.myActiveTasks[g].TaskDescription</td>
+                    <td>
+                        <form method="post" asp-page-handler="FinishTask" asp-route-id="@Model.myActiveTasks[g].TaskID">
+                            <button type="submit" id="FinishTask">Mark Finished</button>
+                            <input type="hidden" name="TaskToFinish" value="@Model.myActiveTasks[g].TaskID" />
+                        </form>
+                    </td>
+                    @if (User.IsInRole("TaskMaster"))
+                    {
+                        <td>
+                            <form method="post" asp-page-handler="RemoveTask">
+                                <button type="submit" id="RemoveTask">Remove</button>
+                                <input type="hidden" name="TaskToDelete" value="@Model.myActiveTasks[g].TaskID" />
+                            </form>
+                        </td>
+                    }
+                </tr>
+                }
+                <!-- async for updates?-->
+            </table>
+        </div>
+    </div>
+
+    <div id="myOpenTasks">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#MyOpenTasks" aria-expanded="true" aria-controls="collapseOne">
+                        Available Tasks
+                    </button>
+                </h5>
+            </div>
+        </div>
+    </div>
+    <div id="MyOpenTasks" class="collapse" aria-labelledby="headingTwo" data-parent="#myOpenTasks">
+        <div class="card-body">
+            <table>
+                <tr>
+                    <td>Task Owner</td>
+                    <td>Task Description</td>
+                </tr>
+                @for (int g = 0; g < Model.TaskMasterAllUnclaimedTask.Count(); g++)
+                {
+                    <tr>
+                        <td>--</td>
+                        <td>@Model.TaskMasterAllUnclaimedTask[g].TaskDescription</td>
+                        @if (true)//TODO: CHECK if player has max number of tasks.
+                        {
+                            <td>
+                                <form method="post" asp-page-handler="ClaimTask">
+                                    <button type="submit" id="ClaimTask">Claim</button>
+                                    <input type="hidden" name="TaskToClaim" value="@Model.TaskMasterAllUnclaimedTask[g].TaskID" />
+                                </form>
+                            </td>
+                        }
+                        @if (User.IsInRole("TaskMaster"))
+                        {
+                            <td>
+                                <form method="post" asp-page-handler="RemoveTask">
+                                    <button type="submit" id="RemoveTask">Remove</button>
+                                    <input type="hidden" name="TaskToDelete" value="@Model.TaskMasterAllUnclaimedTask[g].TaskID" />
+                                </form>
+                            </td>
+                        }
+                    </tr>
+                }
+                <!-- async for updates?-->
+            </table>
+        </div>
+    </div>
+
+    @if (User.IsInRole("TaskMaster"))
+    {
+        <div id="allClaimedTasks">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#AllClaimedTasks" aria-expanded="true" aria-controls="collapseOne">
+                            All Currently Claimed Tasks
+                        </button>
+                    </h5>
+                </div>
+            </div>
+        </div>
+        <div id="AllClaimedTasks" class="collapse" aria-labelledby="headingTwo" data-parent="#allClaimedTasks">
+            <div class="card-body">
+                <table>
+                    <tr>
+                        <td>Task Owner</td>
+                        <td>Task Description</td>
+                    </tr>
+                    @for (int g = 0; g < Model.TaskMasterAllClaimedTasks.Count(); g++)
+                    {
+                        <tr>
+                            @{
+                                var myAsyncTask = myUsers.FindByIdAsync(@Model.TaskMasterAllClaimedTasks[g].ClaimedByID);
+                                myAsyncTask.Wait();
+                                String UserName = myAsyncTask.Result.UserName;
+                            }
+
+                            <td>@UserName</td>
+                            <td>@Model.TaskMasterAllClaimedTasks[g].TaskDescription</td>
+
+                            <td>
+                                <form method="post" asp-page-handler="ClearOwner">
+                                    <button type="submit" id="ClearOwner">ClearOwner</button>
+                                    <input type="hidden" name="TaskToClear" value="@Model.TaskMasterAllClaimedTasks[g].TaskID" />
+                                </form>
+                            </td>
+
+                            <td>
+                                <form method="post" asp-page-handler="RemoveTask">
+                                    <button type="submit" id="RemoveTask">Remove</button>
+                                    <input type="hidden" name="TaskToDelete" value="@Model.TaskMasterAllClaimedTasks[g].TaskID" />
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    <!-- async for updates?-->
+                </table>
+            </div>
+        </div>
+    }
+
+
+</body>
+</html>

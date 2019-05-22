@@ -1,0 +1,50 @@
+﻿@page
+@model RequestOfFeatureModel
+@{
+}
+
+@section Scripts
+{ 
+    <script>
+        $("#FilterByReportType").change(function () {
+            var myAjax = $.ajax({
+                url: './FeatureRequests?id=' + $("#FilterByReportType").val() + '&handler=FilterType',
+                type: 'GET',
+                data: {},
+                headers: { RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val() }
+            });
+            $("#Reports").empty();
+            var myReports = "";
+            myAjax.done(function (result) {
+                for (i = 0; i < result.length; i++)
+                {
+                    myReports += "<tr><td>" +  result[i]["requestBody"] + "</td>";
+                    myReports += "</tr>";
+                }
+                if ($("#Reports").length == 0) {
+                    $("#Reports").html(myReports);
+                }
+                else if ($("#Reports")[0].childElementCount != 0) {
+                    $("#Reports").replaceWith(myReports);
+                }
+                else {
+                    $("#Reports").html(myReports);
+                }
+            });
+        });
+    </script>
+}
+<h3>Feature List</h3>
+<form method="post" asp-page-handler="NewRequestFeature">
+    <label>Report Type:</label>
+    @Html.DropDownList("ReportType", Model.myChoiceSelections.AsEnumerable(), "Select report type")
+    <br />
+    <label>Report:</label>
+    <textarea asp-for="NewRequest" style="width:100%" rows="10"></textarea>
+    <br />
+    <input type="submit" value="Post" />
+</form>
+@Html.DropDownList("FilterByReportType", Model.myChoiceSelections.AsEnumerable(), "filter requests by type");
+<table id="Reports">
+
+</table>

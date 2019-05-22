@@ -1,0 +1,17 @@
+﻿@page
+@model AddTaskModel
+@{
+}
+<form method="post" asp-page-handler="NewTask">
+
+    <label asp-for="DisplayedDescription"></label>
+    <br />
+    <input asp-for="DisplayedDescription"/>
+    <br />
+    <label asp-for="TaskDescription"></label>
+    <br />
+    <textarea asp-for="TaskDescription" rows="7" style="width:100%"></textarea>
+    <br />
+    <input type="submit" name="Add Task" />
+    <label>@Model.OnTaskAdded</label>
+</form>

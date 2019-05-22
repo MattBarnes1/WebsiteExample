@@ -1,0 +1,39 @@
+﻿@page
+@model CreatePollModel
+@{
+}
+
+@section Scripts
+{
+
+}
+
+<form method="post" asp-page-handler="" style="width:100%">
+    <label asp-for="Name"></label>
+    <input asp-for="Name" />
+    <br />
+    <label asp-for="PollQuestion"></label>
+    <br />
+    <textarea asp-for="PollQuestion" style="width:100%" rows="5"></textarea>
+    <br />
+    <div class="row">
+        @{ int i = 0; }
+        @if (Model.Choices != null)
+        {
+            @for (i = 0; i < Model.Choices.Count; i++)
+            {
+                <div class="col-lg-10">
+                    <input asp-for="@Model.Choices[i]" style="width:100%" />
+                </div>
+                <div class="col-lg-2">
+                    <input type="hidden" value="@Model.Choices[i]" name="Value" />
+                    <input type="submit" value="Remove Choice" asp-page-handler="RemoveChoice" />
+                </div>
+            }
+        }
+
+    </div>
+    <input type="submit" value="Add New Question" name="AddID" asp-page-handler="AddChoice" />
+    <br />
+    <input type="submit" value="Finish Question" name="FinishedQuestion" asp-page-handler="FinishedQuestion" />
+</form>
