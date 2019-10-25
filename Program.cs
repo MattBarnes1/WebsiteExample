@@ -38,12 +38,14 @@ namespace WebApplication5
             CheckCreateRole("TaskMaster", RoleManager);
             CheckCreateRole("VotingPermissionRevoked", RoleManager);
             CheckCreateRole("EmailPermissionRevoked", RoleManager);
-           // CheckAddRole(AdminID, "TaskMaster");
-           // CheckAddRole(AdminID, "LeadModeler");
-           // CheckAddRole(AdminID, "LeadWriter");
-           // CheckAddRole(AdminID, "Loremaster");
-          //  CheckAddRole(AdminID, "HR");
-           // SyncPermissions(AdminID);
+            CheckCreateRole("Guest", RoleManager);
+           /* CheckAddRole(AdminID, "TaskMaster");
+            CheckAddRole(AdminID, "LeadModeler");
+            CheckAddRole(AdminID, "LeadWriter");
+            CheckAddRole(AdminID, "Loremaster");
+            CheckAddRole(AdminID, "HR");
+            CheckAddRole(AdminID, "Guest");
+            SyncPermissions(AdminID);*/
             myContext.SaveChanges();
             userManager = (UserManager<UserData>)serviceProvider.GetService(typeof(UserManager<UserData>));    
             HardDriveFiles myFiles = new HardDriveFiles(FileReadWriteManager);

@@ -43,68 +43,72 @@
                 <ul class="nav navbar-nav">
                     @if (mySignIn.IsSignedIn(User))
                     {
-                        <li><a asp-page="./EmailSystem">Email</a></li>
-                        <li><a asp-page="./Dashboard">Home</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tasks<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-page="./TaskViewer">View Tasks</a></li>
-                                @if (User.IsInRole("TaskMaster"))
-                                {
-                                    <li><a asp-page="./AddTask">Create Tasks</a></li>
-                                }
-                            </ul>
-                        </li>
-                        @if (User.IsInRole("HR"))
+
+                        @if (!User.IsInRole("Guest"))
                         {
+                            <li><a asp-page="./EmailSystem">Email</a></li>
+                            <li><a asp-page="./Dashboard">Home</a></li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users<span class="caret"></span></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tasks<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a asp-page="./UserPriviledge">Modify Priviledges</a></li>
-                                    <li><a asp-page="./AddUser">Add User</a></li>
-                                    <li><a asp-page="./RemoveUser">Remove User</a></li>
+                                    <li><a asp-page="./TaskViewer">View Tasks</a></li>
+                                    @if (User.IsInRole("TaskMaster"))
+                                    {
+                                        <li><a asp-page="./AddTask">Create Tasks</a></li>
+                                    }
+                                </ul>
+                            </li>
+                            @if (User.IsInRole("HR"))
+                            {
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-page="./UserPriviledge">Modify Priviledges</a></li>
+                                        <li><a asp-page="./AddUser">Add User</a></li>
+                                        <li><a asp-page="./RemoveUser">Remove User</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Polls<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    @if (User.IsInRole("LeadWriter") || User.IsInRole("LeadModeler") || User.IsInRole("Loremaster"))
+                                    {
+                                        <li><a asp-page="./CreatePoll">Create Poll</a></li>
+                                    }
+                                    <li><a asp-page="./DisplayPollList">View Polls</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Models<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-page="./ModelViewer">View Models</a></li>
+                                    @if (User.IsInRole("Modeler"))
+                                    {
+                                        <li><a asp-page="./UploadModel">Upload Models</a></li>
+                                    }
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Lore<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-page="./ViewCanon">View Canon</a></li>
+                                    <li><a asp-page="./ViewProposed">View Proposed Lore</a></li>
+                                    <li><a asp-page="./ViewMyDrafts">View My Lore Drafts</a></li>
+                                    @if (User.IsInRole("Loremaster"))
+                                    {
+                                        <li><a asp-page="./Loresystem">Enact Lore</a></li>
+                                    }
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Media<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-page="./DevBlogEditor">Write a blog!</a></li>
+                                    <li><a asp-page="./ProposeScreenShot">Propose a Screenshot</a></li>
                                 </ul>
                             </li>
                         }
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Polls<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                @if (User.IsInRole("LeadWriter") || User.IsInRole("LeadModeler") || User.IsInRole("Loremaster"))
-                                {
-                                    <li><a asp-page="./CreatePoll">Create Poll</a></li>
-                                }
-                                <li><a asp-page="./DisplayPollList">View Polls</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Models<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-page="./ModelViewer">View Models</a></li>
-                                @if (User.IsInRole("Modeler"))
-                                {
-                                    <li><a asp-page="./UploadModel">Upload Models</a></li>
-                                }
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Lore<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-page="./ViewCanon">View Canon</a></li>
-                                <li><a asp-page="./ViewProposed">View Proposed Lore</a></li>
-                                <li><a asp-page="./ViewMyDrafts">View My Lore Drafts</a></li>
-                                @if (User.IsInRole("Loremaster"))
-                                {
-                                    <li><a asp-page="./Loresystem">Enact Lore</a></li>
-                                }
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Media<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-page="./DevBlogEditor">Write a blog!</a></li>
-                                <li><a asp-page="./ProposeScreenShot">Propose a Screenshot</a></li>
-                            </ul>
-                        </li>
 
 
                     }
@@ -129,22 +133,22 @@
                             </ul>
                         </li>
                     }
-                        <li>
-                            @if (mySignIn.IsSignedIn(User))
-                            {
+                    <li>
+                        @if (mySignIn.IsSignedIn(User))
+                        {
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <img id="emailalert" style="width:30px; height:30px; position:inherit"  src="~/images/emailInactiveImage.png" onclick="" />
+                                    <img id="emailalert" style="width:30px; height:30px; position:inherit" src="~/images/emailInactiveImage.png" onclick="" />
                                 </li>
                                 <li>
-                                    <img id="pollalert" style="width:30px; height:30px"  src="~/images/pollInactiveImage.png" onclick="" />
+                                    <img id="pollalert" style="width:30px; height:30px" src="~/images/pollInactiveImage.png" onclick="" />
                                 </li>
                                 <li>
                                     <img id="lorealert" style="width:30px; height:30px" src="~/images/loreInactiveImage.png" onclick="" />
                                 </li>
                             </ul>
-                            }
-                        </li>
+                        }
+                    </li>
                     <li><partial name="_LoginPartial" /></li>
                 </ul>
             </div>

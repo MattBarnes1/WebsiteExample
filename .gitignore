@@ -21,3 +21,11 @@ $RECYCLE.BIN/
 # =========================
 # Operating System Files
 # =========================
+appsettings.Development.json
+*.json
+*.dll
+obj/Debug/netcoreapp2.1/WebsiteExample.pdb
+*.pdb
+*.pubxml
+Properties/PublishProfiles/DevStudios - Web Deploy.pubxml.user
+obj/*
